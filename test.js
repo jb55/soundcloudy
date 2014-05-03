@@ -1,7 +1,9 @@
 
 var expect = require('expect.js');
+var through = require('through');
 var soundcloud = require('./');
 var assert = require('assert');
+var debug = require('debug')('soundcloudy:test');
 var fmt = require('util').format;
 var co = require('co');
 
@@ -32,11 +34,22 @@ describe('user tracks', function(){
       var tracks = yield request()
         .resource('users/%s/tracks', 'monstercat')
         .all(6)
-
       expect(tracks).to.be.a(Array);
       assert(tracks.length > 50);
     })(done);
   });
+
+  it("stream works", function(done){
+    var tracks = request()
+      .resource('users/%s/tracks', 'jb55')
+      .allStream(1)
+      .pipe(through(function(item){
+        debug('jb55 track %j', item);
+        expect(item.kind).to.be('track');
+      }))
+      .on('end', done);
+  });
+
 });
 
 describe('all pages', function(){
