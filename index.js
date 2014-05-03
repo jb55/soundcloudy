@@ -47,10 +47,10 @@ SoundCloudy.prototype.qs = function(extra) {
  *
  * @api public
  */
+SoundCloudy.prototype.pageSize =
 SoundCloudy.prototype.limit = function(limit) {
   return this.param("limit", limit)
 }
-
 
 /**
  * Set querystring parameters

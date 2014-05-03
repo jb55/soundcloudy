@@ -30,7 +30,8 @@ co(function* () {
   // all pages with fast pagination
   var tracks = yield request()
     .resource('users/%s/tracks', user);
-    .concurrency(3)
+    .pageSize(500)
+    .concurrency(2)
     .all()
 })();
 
