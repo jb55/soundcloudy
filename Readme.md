@@ -30,7 +30,6 @@ co(function* () {
     .resource('users/%s/tracks', user);
     .concurrency(3)
     .all()
-  }
 })();
 
 ```
