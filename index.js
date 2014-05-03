@@ -42,6 +42,12 @@ SoundCloudy.prototype.qs = function(extra) {
 }
 
 
+SoundCloudy.prototype.concurrency = function(c) {
+  if (c == null) return this._concurrency;
+  this._concurrency = c
+  return this
+}
+
 /**
  * limit param helper
  *
@@ -137,10 +143,10 @@ SoundCloudy.prototype.all = function*(c) {
  * @api public
  */
 
-SoundCloudy.prototype.allStream = function(concurrency) {
+SoundCloudy.prototype.allStream = function() {
   var stream = through();
   stream.pause();
-  co(this._allStream(concurrency, stream))();
+  co(this._allStream(stream))();
   return stream;
 }
 
@@ -149,8 +155,8 @@ SoundCloudy.prototype.allStream = function(concurrency) {
  *
  * @api public
  */
-SoundCloudy.prototype._allStream = function*(concurrency, stream) {
-  concurrency = concurrency == null? 3 : concurrency;
+SoundCloudy.prototype._allStream = function*(stream) {
+  var concurrency = this.concurrency() == null? 3 : this.concurrency();
 
   var self = this;
   var results = [];

@@ -37,6 +37,23 @@ co(function* () {
 
 ```
 
+## Stream Example
+
+```js
+var through = require('through');
+var request = require('soundcloudy')(clientId);
+
+request()
+.resource('users/%s/tracks', 'monstercat');
+.pageSize(300)
+.concurrency(2)
+.allStream()
+.pipe(through(function(track){
+  console.log(track);
+}));
+
+```
+
 ## API
 
 ### soundcloudy(clientId)
@@ -61,15 +78,21 @@ returns: `co` yieldable
 
 Run a single request
 
-### Request.all([concurrency || 3])
+### Request.concurrency(n)
+
+returns: Request
+
+Set the batch request level for `all` and `allStream` requests
+
+### Request.all()
 
 returns: `co` yieldable
 
-Keep running requests until all pages are fetched. Use `concurrency` to
+Keep running requests until all pages are fetched. Use `.concurrency` to
 adjust request batching. `all` does requests optimistically until all pages are
 retrieved.
 
-### Request.allStream([concurrency || 3])
+### Request.allStream()
 
 returns: Readable stream
 

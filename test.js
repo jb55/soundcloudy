@@ -34,7 +34,9 @@ describe('user tracks', function(){
       var tracks = yield request()
         .resource('users/%s/tracks', 'monstercat')
         .limit(300)
-        .all(2)
+        .concurrency(2)
+        .all()
+
       expect(tracks).to.be.a(Array);
       assert(tracks.length >= 300);
     })(done);
@@ -43,7 +45,8 @@ describe('user tracks', function(){
   it("stream works", function(done){
     var tracks = request()
       .resource('users/%s/tracks', 'jb55')
-      .allStream(1)
+      .concurrency(1)
+      .allStream()
       .pipe(through(function(item){
         debug('jb55 track %j', item);
         expect(item.kind).to.be('track');
