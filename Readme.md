@@ -3,6 +3,8 @@
 
   A simple soundcloud api wrapper
 
+  [![Build Status](https://travis-ci.org/jb55/soundcloudy.svg)](https://travis-ci.org/jb55/soundcloudy)
+
 ## Installation
 
   Install with npm
