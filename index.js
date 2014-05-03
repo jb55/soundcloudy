@@ -4,11 +4,14 @@ var util = require('util');
 var assert = require('assert');
 var request = require('superagent');
 var qs = require('querystring');
+var co = require('co');
 var debug = require('debug')('soundcloudy');
 var range = require('range-generator');
+var through = require('through');
 var array = require('toarray-iterator');
 var arr = require('array-iterator');
 var $ = require('modular-chainer');
+var read = require('co-read');
 var format = util.format;
 
 module.exports = function(clientId) {
@@ -119,12 +122,34 @@ SoundCloudy.prototype.batch = function(offset, pageSize, n) {
 }
 
 
+SoundCloudy.prototype.all = function*(c) {
+  var items = [];
+  var stream = this.allStream(c);
+  var item;
+  while (item = yield read(stream))
+    items.push(item);
+  return items;
+}
+
 /**
- * rest request pager
+ * Streaming version of all
  *
  * @api public
  */
-SoundCloudy.prototype.all = function*(concurrency) {
+
+SoundCloudy.prototype.allStream = function(concurrency) {
+  var stream = through();
+  stream.pause();
+  co(this._allStream(concurrency, stream))();
+  return stream;
+}
+
+/**
+ * internal all stream
+ *
+ * @api public
+ */
+SoundCloudy.prototype._allStream = function*(concurrency, stream) {
   concurrency = concurrency == null? 3 : concurrency;
 
   var self = this;
@@ -139,15 +164,18 @@ SoundCloudy.prototype.all = function*(concurrency) {
 
   while(first || !donePaging(batch, pageSize)) {
     first = false;
+    stream.pause();
     batch = yield next();
+    stream.resume();
     for (let responses of arr(batch)) {
       for (let response of arr(responses)) {
-        results.push(response);
+        stream.push(response)
       }
     }
   }
 
-  return results;
+  stream.push(null);
+  return stream;
 }
 
 /**

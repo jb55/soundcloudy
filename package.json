@@ -1,7 +1,10 @@
 {
   "name": "soundcloudy",
   "description": "co-ready soundcloud wrapper",
-  "keywords": ["co", "soundcloud"],
+  "keywords": [
+    "co",
+    "soundcloud"
+  ],
   "version": "0.0.1",
   "repository": {
     "type": "git",
@@ -13,6 +16,8 @@
   },
   "dependencies": {
     "array-iterator": "0.0.1",
+    "co": "^3.0.6",
+    "co-read": "0.0.2",
     "debug": "^0.8.1",
     "modular-chainer": "^0.1.2",
     "range-generator": "^1.0.2",

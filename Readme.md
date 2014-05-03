@@ -68,6 +68,12 @@ Keep running requests until all pages are fetched. Use `concurrency` to
 adjust request batching. `all` does requests optimistically until all pages are
 retrieved.
 
+### Request.allStream([concurrency || 3])
+
+returns: Readable stream
+
+Stream paged results
+
 ## License
 
   The MIT License (MIT)
