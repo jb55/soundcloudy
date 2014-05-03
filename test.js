@@ -33,9 +33,10 @@ describe('user tracks', function(){
     co(function*(){
       var tracks = yield request()
         .resource('users/%s/tracks', 'monstercat')
-        .all(6)
+        .limit(300)
+        .all(2)
       expect(tracks).to.be.a(Array);
-      assert(tracks.length > 50);
+      assert(tracks.length >= 300);
     })(done);
   });
 
